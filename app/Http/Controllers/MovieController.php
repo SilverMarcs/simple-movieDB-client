@@ -8,19 +8,27 @@ use App\Models\FavoriteMovie;
 
 class MovieController extends Controller
 {
+    // movieDb api is hardcoded on server side to provide a maxmimum of 20 movies so we need to call the api twice to get 30 movies
+    // if the requirement is to get 30 movies is not strict, then we can just make one api request here
     public function fetchMovies()
     {
         $apiKey = env('MOVIE_DB_API_KEY');
-        $response = Http::get("https://api.themoviedb.org/3/discover/movie?api_key={$apiKey}&language=en-US&per_page=30");
-
-        $movies = $response->json()['results'];
-
+        $response1 = Http::get("https://api.themoviedb.org/3/discover/movie?api_key={$apiKey}&language=en-US&page=1");
+        $response2 = Http::get("https://api.themoviedb.org/3/discover/movie?api_key={$apiKey}&language=en-US&page=2");
+    
+        $movies1 = $response1->json()['results'];
+        $movies2 = $response2->json()['results'];
+    
+        $movies = array_merge($movies1, $movies2);
+        $movies = array_slice($movies, 0, 30);
+    
         foreach ($movies as $key => $movie) {
             $movies[$key]['isFavorited'] = $this->isFavorited($movie['title']);
         }
-
+    
         return view('movies', ['movies' => $movies]);
     }
+    
 
     public function showFavorites()
     {
