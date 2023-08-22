@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\MovieController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/', [MovieController::class, 'fetchMovies']);
+Route::post('/favorite', [MovieController::class, 'favoriteMovie']);
+Route::get('/favorites', [MovieController::class, 'showFavorites']);
+
