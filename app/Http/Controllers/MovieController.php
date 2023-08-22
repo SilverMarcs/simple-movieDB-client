@@ -21,16 +21,6 @@ class MovieController extends Controller
 
         return view('movies', ['movies' => $movies]);
     }
-    
-
-    public function favoriteMovie(Request $request)
-    {
-        $favoriteMovie = new FavoriteMovie;
-        $favoriteMovie->title = $request->title;
-        $favoriteMovie->save();
-
-        return back();
-    }
 
     public function showFavorites()
     {
@@ -47,6 +37,25 @@ class MovieController extends Controller
     {
         return FavoriteMovie::where('title', $title)->exists();
     }
+
+    public function favorite(Request $request)
+    {
+        $title = $request->input('title');
+        $action = $request->input('action');
+
+        if ($action === 'add') {
+            // Add to favorites
+            $favorite = new FavoriteMovie;
+            $favorite->title = $title;
+            $favorite->save();
+        } elseif ($action === 'remove') {
+            // Remove from favorites
+            FavoriteMovie::where('title', $title)->delete();
+        }
+
+        return back();
+    }
+
 
 
 }

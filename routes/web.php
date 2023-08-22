@@ -19,6 +19,6 @@ Route::get('/', function () {
 });
 
 Route::get('/', [MovieController::class, 'fetchMovies']);
-Route::post('/favorite', [MovieController::class, 'favoriteMovie']);
 Route::get('/favorites', [MovieController::class, 'showFavorites']);
+Route::post('/favorite', [MovieController::class, 'favorite']);
 

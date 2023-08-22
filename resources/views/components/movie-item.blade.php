@@ -3,6 +3,7 @@
     <form action="/favorite" method="post">
         @csrf
         <input type="hidden" name="title" value="{{ $title }}">
+        <input type="hidden" name="action" value="{{ $favorited ? 'remove' : 'add' }}">
         <button type="submit" class="btn btn-success">
             @if($favorited)
                 <i class="fas fa-heart"></i>
